@@ -2,6 +2,8 @@ import os
 import json
 import sys
 
+import logging
+
 def main():
     # Parse spec into a dict
     spec = json.loads(sys.stdin.read())
@@ -12,6 +14,10 @@ def metric(spec):
     metadata = spec["resource"]["metadata"]
     # Get labels from provided metdata
     labels = metadata["labels"]
+    
+    # Log spec to see what it looks like
+    logging.basicConfig(level=logging.INFO)
+    logging.info(spec)
 
     if "numPods" in labels:
         # If numPods label exists, output the value of the numPods
