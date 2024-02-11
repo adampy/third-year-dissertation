@@ -12,3 +12,5 @@ cd ..
 
 # Shutdown exposed service if it was created
 kubectl delete service hello-kubernetes
+
+kubectl delete pods,deployments,services -l app=teastore
