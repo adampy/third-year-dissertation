@@ -1,18 +1,20 @@
 # Install Metrics API
-cd metrics-server
-./apply.sh
-cd ..
+kubectl apply -f ./metrics-server/components.yaml
 
 # Install CPA
 kubectl apply -f https://github.com/jthomperoo/custom-pod-autoscaler-operator/releases/download/v1.4.0/cluster.yaml
 
 # Install the application
-#kubectl apply -f deployment.yaml
-kubectl create -f https://raw.githubusercontent.com/DescartesResearch/TeaStore/master/examples/kubernetes/teastore-ribbon.yaml
+kubectl apply -f ./azure/modified-teastore-ribbon.yaml
 
-# Build and apply custom autoscaler
-docker build -t python-custom-autoscaler .
-kubectl apply -f cpa.yaml
+# Build PPA image
+docker build -t proactive-pod-autoscaler .
 
-# Optionally expose the service
-#kubectl expose deployment/hello-kubernetes --type="NodePort" --name=python-custom-autoscaler --port 8080 --target-port 8080
+# Now apply PPA to all the deployments
+kubectl apply -f cpas/cpa-teastore-auth.yaml
+kubectl apply -f cpas/cpa-teastore-db.yaml
+kubectl apply -f cpas/cpa-teastore-image.yaml
+kubectl apply -f cpas/cpa-teastore-persistence.yaml
+kubectl apply -f cpas/cpa-teastore-recommender.yaml
+kubectl apply -f cpas/cpa-teastore-registry.yaml
+kubectl apply -f cpas/cpa-teastore-webui.yaml

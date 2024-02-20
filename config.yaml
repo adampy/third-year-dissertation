@@ -12,11 +12,11 @@ metric:
     entrypoint: "python"
     command:
       - "/metric.py"
-# kubernetesMetricSpecs:
-#   - type: Resource
-#     resource:
-#       name: cpu
-#       target:
-#         type: Utilization
-# requireKubernetesMetrics: true
+kubernetesMetricSpecs:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+requireKubernetesMetrics: false
 runMode: "per-resource"

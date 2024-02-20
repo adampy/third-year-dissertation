@@ -1,3 +1,7 @@
+# Obtained from https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# This file is used to deploy the metrics-server to the cluster.
+# Edited line is 144 "--kubelet-insecure-tls" required to allow the metrics-server to connect to the kubelet - not recommended for production environments
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:

@@ -16,7 +16,7 @@ def evaluate(spec):
 
         # Build JSON dict with targetReplicas
         evaluation = {}
-        evaluation["targetReplicas"] = value# * 2
+        evaluation["targetReplicas"] = value * 2
 
         # Output JSON to stdout
         sys.stdout.write(json.dumps(evaluation))

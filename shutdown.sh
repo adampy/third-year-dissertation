@@ -1,16 +1,11 @@
 # Shutdown CPA and the application
-kubectl delete -f cpa.yaml
-kubectl delete -f deployment.yaml
+kubectl delete cpa --all
 
 # Shutdown CPA lib
 kubectl delete -f https://github.com/jthomperoo/custom-pod-autoscaler-operator/releases/download/v1.4.0/cluster.yaml
 
 # Shutdown Metrics API
-cd metrics-server
-./delete.sh
-cd ..
+kubectl delete -f ./metrics-server/components.yaml
 
 # Shutdown exposed service if it was created
-kubectl delete service hello-kubernetes
-
 kubectl delete pods,deployments,services -l app=teastore

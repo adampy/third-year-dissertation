@@ -13,6 +13,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: teastore-recommender
+  roleRequiresMetricsServer: true
   config:
     - name: interval
       value: "10000"

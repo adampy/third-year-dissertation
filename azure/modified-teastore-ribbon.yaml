@@ -1,3 +1,7 @@
+# Obtained from https://raw.githubusercontent.com/DescartesResearch/TeaStore/master/examples/kubernetes/teastore-ribbon.yaml
+# This file is used to deploy the TeaStore to the cluster.
+# Edited line is 241 "type: LoadBalancer" to expose the teastore-webui service (LoadBalancer gives external IP whereas NodePort does not)
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -225,6 +229,11 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        resources:
+          limits:
+            cpu: 500m # Max is 0.5vCPUs
+          requests:
+            cpu: 200m # Request 0.2vCPUs
 ---
 apiVersion: v1
 kind: Service
