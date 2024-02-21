@@ -231,9 +231,9 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 500m # Max is 0.5vCPUs
+            cpu: 1200m # Max is 1.2vCPUs
           requests:
-            cpu: 200m # Request 0.2vCPUs
+            cpu: 1200m # Request 1.2vCPUs
 ---
 apiVersion: v1
 kind: Service

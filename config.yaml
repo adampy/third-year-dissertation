@@ -20,3 +20,4 @@ kubernetesMetricSpecs:
         type: Utilization
 requireKubernetesMetrics: false
 runMode: "per-resource"
+interval: 15000
