@@ -8,7 +8,7 @@ kubectl apply -f https://github.com/jthomperoo/custom-pod-autoscaler-operator/re
 kubectl apply -f ./azure/modified-teastore-ribbon.yaml
 
 # Build PPA image
-docker build -t proactive-pod-autoscaler .
+#docker build -t proactive-pod-autoscaler .
 
 # Now apply PPA to all the deployments
 kubectl apply -f cpas/cpa-teastore-auth.yaml
