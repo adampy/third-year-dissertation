@@ -7,8 +7,10 @@ spec:
     spec:
       containers:
       - name: proactive-pod-autoscaler
-        image: proactive-pod-autoscaler:latest
+        image: adamc1234/proactive-pod-autoscaler:latest
         imagePullPolicy: IfNotPresent
+      imagePullSecrets: # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret and https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#inspecting-the-secret-regcred
+      - name: regcred
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
