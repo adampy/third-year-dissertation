@@ -134,6 +134,7 @@ spec:
       labels:
         k8s-app: metrics-server
     spec:
+      # hostNetwork: true
       containers:
       - args:
         - --cert-dir=/tmp
@@ -141,6 +142,8 @@ spec:
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
         - --metric-resolution=15s
+        # - --kubelet-client-certificate=/etc/kubernetes/pki/ca.crt
+        # - --kubelet-client-key=/etc/kubernetes/pki/ca.key 
         - --kubelet-insecure-tls # This is required to allow the metrics-server to connect to the kubelet. This is not recommended for production environments.
         image: registry.k8s.io/metrics-server/metrics-server:v0.7.0
         imagePullPolicy: IfNotPresent

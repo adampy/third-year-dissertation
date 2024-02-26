@@ -42,3 +42,13 @@ kubeadm token create --print-join-command
 ```bash
 sudo kubeadm join 10.0.0.4:6443 --token 55edt2.lk984h2rf9z11naa --discovery-token-ca-cert-hash sha256:25310b5c17508210ad674808a23f26c907114b6fc966f06b20837c0f7fbaed8f --cri-socket unix:///var/run/cri-dockerd.sock
 ```
+
+# If DNS names cannot be resolved inside the pods after installation and deployment
+https://stackoverflow.com/questions/45805483/kubernetes-pods-cant-resolve-hostnames
+```bash
+kubectl -n kube-system rollout restart deployment coredns
+```
+
+# For installing Prometheus using Helm
+https://helm.sh/docs/intro/install/#from-script
+https://github.com/prometheus-community/helm-charts / https://www.youtube.com/watch?v=Nng7z7xGh7g
