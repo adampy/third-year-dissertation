@@ -2,14 +2,14 @@
 https://stackoverflow.com/questions/48957195/how-to-fix-docker-got-permission-denied-issue
 ```bash
 sudo groupadd docker
-sudo usermod -aG docker $USERsudo usermod -aG docker $USER
+sudo usermod -aG docker $USER
 newgrp docker
 ```
 
 # Installing cri-dockerd
 https://www.mirantis.com/blog/how-to-install-cri-dockerd-and-migrate-nodes-from-dockershim/
 
-# For initialising a K8 cluster (using kubeadm)
+# For initialising a K8 cluster (using kubeadm) - RUN THIS EVERYTIME WE BOOT UP MASTER (added into `~/.bashrc`)
 ```bash
 sudo kubeadm init --cri-socket unix:///var/run/cri-dockerd.sock
 ```
