@@ -1,8 +1,7 @@
-# Obtained from https://www.mirantis.com/blog/how-to-install-cri-dockerd-and-migrate-nodes-from-dockershim/
-
 wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.10/cri-dockerd-0.3.10.amd64.tgz
 tar -xvf cri-dockerd-0.3.10.amd64.tgz
-sudo mv cri-dockerd/cri-dockerd /usr/local/bin
+sudo mv ./cri-dockerd/cri-dockerd /usr/local/bin/
+rm -rf ./cri-dockerd/
 
 wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.service
 wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.socket
