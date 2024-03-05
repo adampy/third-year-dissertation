@@ -3,6 +3,7 @@ import requests
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from typing import Union
+import csv
 
 URL = "http://172.187.146.126:31767"
 START_TIME = datetime.datetime(2024, 3, 4, 15, 0, 0)
@@ -23,32 +24,56 @@ class PodData:
         plt.xlabel("Time")
         plt.ylabel("CPU Usage")
         plt.show()
-
-def get_data(query: str) -> list[PodData]:
-    # Send reqeust to Prometheus
-    response = requests.get(URL + "/api/v1/query_range", params={
-        "query": QUERY,
-        "start": START_TIME.timestamp(),
-        "end": END_TIME.timestamp(),
-        "step": 15
-    })
-    data = response.json()
-    
-    # First check for error
-    if data['status'] != 'success':
-        raise ValueError(data['error'])
-    
-    # Now parse into PodData
-    pods = data['data']['result']
-    pod_data = []
-    for pod in pods:
-        name = pod['metric']['pod']
-        values = pod['values']
-        pod_data.append(PodData(name, values))
-    
-    return pod_data
+        
+    def save_to_csv(self, filename: str):
+        with open(filename, "w", newline="\n") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Timestamp", "Value"])
+            writer.writerows(self.data)
+                
+    @classmethod
+    def from_csv(cls, filename: str):
+        with open(filename, "r") as f:
+            reader = csv.reader(f)
+            next(reader) # Skip header
+            data = [[int(row[0]), float(row[1])] for row in reader if row]
+            return cls(filename, data)
+        
+    @classmethod
+    def from_query(cls, query: str) -> list['PodData']:
+        # Send reqeust to Prometheus
+        response = requests.get(URL + "/api/v1/query_range", params={
+            "query": QUERY,
+            "start": START_TIME.timestamp(),
+            "end": END_TIME.timestamp(),
+            "step": 15
+        })
+        data = response.json()
+        
+        # First check for error
+        if data['status'] != 'success':
+            raise ValueError(data['error'])
+        
+        # Now parse into PodData
+        pods = data['data']['result']
+        pod_data = []
+        for pod in pods:
+            name = pod['metric']['pod']
+            values = pod['values']
+            pod_data.append(PodData(name, values))
+        
+        return pod_data
 
 if __name__ == "__main__":
-    data = get_data(QUERY)
-    webui = [pod for pod in data if 'webui' in pod.name][0]
+    # Open from file
+    webui = PodData.from_csv("webui.csv")
+    
+    # Or get from Prometheus
+    #data = PodData.from_query(QUERY)
+    #webui = [pod for pod in data if 'webui' in pod.name][0]
+    
+    # Plot data
     webui.plot()
+    
+    # Save to file
+    #webui.save_to_csv("webui.csv")
