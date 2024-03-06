@@ -1,16 +1,18 @@
 {
     "resource": {
         "apiVersion": "apps/v1",
-        "kind": "Deployment",
+        "kind": "ReplicaSet",
         "metadata": {
             "annotations": {
-                "deployment.kubernetes.io/revision": "1",
-                "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"apps/v1\",\"kind\":\"Deployment\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"teastore\",\"run\":\"teastore-webui\"},\"name\":\"teastore-webui\",\"namespace\":\"default\"},\"spec\":{\"selector\":{\"matchLabels\":{\"app\":\"teastore\",\"run\":\"teastore-webui\"}},\"template\":{\"metadata\":{\"labels\":{\"app\":\"teastore\",\"run\":\"teastore-webui\"}},\"spec\":{\"containers\":[{\"env\":[{\"name\":\"USE_POD_IP\",\"value\":\"true\"},{\"name\":\"REGISTRY_HOST\",\"value\":\"teastore-registry\"}],\"image\":\"descartesresearch/teastore-webui\",\"name\":\"teastore-webui\",\"ports\":[{\"containerPort\":8080}],\"resources\":{\"limits\":{\"cpu\":\"500m\"},\"requests\":{\"cpu\":\"200m\"}}}],\"restartPolicy\":\"Always\"}}}}\n"
+                "deployment.kubernetes.io/desired-replicas": "1",
+                "deployment.kubernetes.io/max-replicas": "2",
+                "deployment.kubernetes.io/revision": "1"
             },
-            "creationTimestamp": "2024-02-14T16:47:07Z",
+            "creationTimestamp": "2024-03-05T22:31:42Z",
             "generation": 1,
             "labels": {
                 "app": "teastore",
+                "pod-template-hash": "654cffc85f",
                 "run": "teastore-webui"
             },
             "managedFields": [
@@ -21,32 +23,30 @@
                         "f:metadata": {
                             "f:annotations": {
                                 ".": {},
-                                "f:kubectl.kubernetes.io/last-applied-configuration": {}
+                                "f:deployment.kubernetes.io/desired-replicas": {},
+                                "f:deployment.kubernetes.io/max-replicas": {},
+                                "f:deployment.kubernetes.io/revision": {}
                             },
                             "f:labels": {
                                 ".": {},
                                 "f:app": {},
+                                "f:pod-template-hash": {},
                                 "f:run": {}
+                            },
+                            "f:ownerReferences": {
+                                ".": {},
+                                "k:{\"uid\":\"63e1f9bb-1ca8-448d-b195-64c1905e0a42\"}": {}
                             }
                         },
                         "f:spec": {
-                            "f:progressDeadlineSeconds": {},
                             "f:replicas": {},
-                            "f:revisionHistoryLimit": {},
                             "f:selector": {},
-                            "f:strategy": {
-                                "f:rollingUpdate": {
-                                    ".": {},
-                                    "f:maxSurge": {},
-                                    "f:maxUnavailable": {}
-                                },
-                                "f:type": {}
-                            },
                             "f:template": {
                                 "f:metadata": {
                                     "f:labels": {
                                         ".": {},
                                         "f:app": {},
+                                        "f:pod-template-hash": {},
                                         "f:run": {}
                                     }
                                 },
@@ -102,81 +102,58 @@
                             }
                         }
                     },
-                    "manager": "kubectl-client-side-apply",
+                    "manager": "kube-controller-manager",
                     "operation": "Update",
-                    "time": "2024-02-14T16:47:07Z"
+                    "time": "2024-03-05T22:31:42Z"
                 },
                 {
                     "apiVersion": "apps/v1",
                     "fieldsType": "FieldsV1",
                     "fieldsV1": {
-                        "f:metadata": {
-                            "f:annotations": {
-                                "f:deployment.kubernetes.io/revision": {}
-                            }
-                        },
                         "f:status": {
                             "f:availableReplicas": {},
-                            "f:conditions": {
-                                ".": {},
-                                "k:{\"type\":\"Available\"}": {
-                                    ".": {},
-                                    "f:lastTransitionTime": {},
-                                    "f:lastUpdateTime": {},
-                                    "f:message": {},
-                                    "f:reason": {},
-                                    "f:status": {},
-                                    "f:type": {}
-                                },
-                                "k:{\"type\":\"Progressing\"}": {
-                                    ".": {},
-                                    "f:lastTransitionTime": {},
-                                    "f:lastUpdateTime": {},
-                                    "f:message": {},
-                                    "f:reason": {},
-                                    "f:status": {},
-                                    "f:type": {}
-                                }
-                            },
+                            "f:fullyLabeledReplicas": {},
                             "f:observedGeneration": {},
                             "f:readyReplicas": {},
-                            "f:replicas": {},
-                            "f:updatedReplicas": {}
+                            "f:replicas": {}
                         }
                     },
                     "manager": "kube-controller-manager",
                     "operation": "Update",
                     "subresource": "status",
-                    "time": "2024-02-14T16:47:16Z"
+                    "time": "2024-03-05T22:31:51Z"
                 }
             ],
-            "name": "teastore-webui",
+            "name": "teastore-webui-654cffc85f",
             "namespace": "default",
-            "resourceVersion": "159511",
-            "uid": "0de26991-cb41-44b0-a54d-06ed86ba866f"
+            "ownerReferences": [
+                {
+                    "apiVersion": "apps/v1",
+                    "blockOwnerDeletion": true,
+                    "controller": true,
+                    "kind": "Deployment",
+                    "name": "teastore-webui",
+                    "uid": "63e1f9bb-1ca8-448d-b195-64c1905e0a42"
+                }
+            ],
+            "resourceVersion": "318756",
+            "uid": "935a9493-f7a1-461b-a205-4ac500ed1427"
         },
         "spec": {
-            "progressDeadlineSeconds": 600,
             "replicas": 1,
-            "revisionHistoryLimit": 10,
             "selector": {
                 "matchLabels": {
                     "app": "teastore",
+                    "pod-template-hash": "654cffc85f",
                     "run": "teastore-webui"
                 }
-            },
-            "strategy": {
-                "rollingUpdate": {
-                    "maxSurge": "25%",
-                    "maxUnavailable": "25%"
-                },
-                "type": "RollingUpdate"
             },
             "template": {
                 "metadata": {
                     "creationTimestamp": null,
                     "labels": {
                         "app": "teastore",
+                        "pod-template-hash": "654cffc85f",
                         "run": "teastore-webui"
                     }
                 },
@@ -204,10 +181,10 @@
                             ],
                             "resources": {
                                 "limits": {
-                                    "cpu": "500m"
+                                    "cpu": "1200m"
                                 },
                                 "requests": {
-                                    "cpu": "200m"
+                                    "cpu": "1200m"
                                 }
                             },
                             "terminationMessagePath": "/dev/termination-log",
@@ -224,28 +201,10 @@
         },
         "status": {
             "availableReplicas": 1,
-            "conditions": [
-                {
-                    "lastTransitionTime": "2024-02-14T16:47:16Z",
-                    "lastUpdateTime": "2024-02-14T16:47:16Z",
-                    "message": "Deployment has minimum availability.",
-                    "reason": "MinimumReplicasAvailable",
-                    "status": "True",
-                    "type": "Available"
-                },
-                {
-                    "lastTransitionTime": "2024-02-14T16:47:07Z",
-                    "lastUpdateTime": "2024-02-14T16:47:16Z",
-                    "message": "ReplicaSet \"teastore-webui-84788ccd89\" has successfully progressed.",
-                    "reason": "NewReplicaSetAvailable",
-                    "status": "True",
-                    "type": "Progressing"
-                }
-            ],
+            "fullyLabeledReplicas": 1,
             "observedGeneration": 1,
             "readyReplicas": 1,
-            "replicas": 1,
-            "updatedReplicas": 1
+            "replicas": 1
         }
     },
     "runType": "scaler",
@@ -263,20 +222,20 @@
             },
             "resource": {
                 "pod_metrics_info": {
-                    "teastore-webui-84788ccd89-sbknl": {
-                        "Timestamp": "2024-02-14T16:54:21Z",
-                        "Window": 14990000000,
-                        "Value": 17
+                    "teastore-webui-654cffc85f-9h4nd": {
+                        "Timestamp": "2024-03-05T23:40:50Z",
+                        "Window": 14994000000,
+                        "Value": 14
                     }
                 },
                 "requests": {
-                    "teastore-webui-84788ccd89-sbknl": 200
+                    "teastore-webui-654cffc85f-9h4nd": 1200
                 },
                 "ready_pod_count": 1,
                 "ignored_pods": {},
                 "missing_pods": {},
                 "total_pods": 1,
-                "timestamp": "2024-02-14T16:54:21Z"
+                "timestamp": "2024-03-05T23:40:50Z"
             }
         }
     ]

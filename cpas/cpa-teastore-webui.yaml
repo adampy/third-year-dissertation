@@ -8,13 +8,13 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets: # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret and https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#inspecting-the-secret-regcred
       - name: regcred
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: Deployment
-    name: teastore-webui
+    kind: ReplicaSet
+    name: teastore-webui-654cffc85f
   roleRequiresMetricsServer: true
   config:
     - name: interval

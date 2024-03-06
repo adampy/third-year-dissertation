@@ -55,3 +55,12 @@ kubectl -n kube-system rollout restart deployment coredns
 # For installing Prometheus using Helm
 https://helm.sh/docs/intro/install/#from-script
 https://github.com/prometheus-community/helm-charts / https://www.youtube.com/watch?v=Nng7z7xGh7g
+
+# For exposing Prometheus using Docker Desktop
+```bash
+kubectl port-forward service/prometheus-server 9090:80
+```
+
+# For viewing required metrics from Prometheus
+`sum(rate(container_cpu_usage_seconds_total{pod!=""}[5m])) by (pod)`
+

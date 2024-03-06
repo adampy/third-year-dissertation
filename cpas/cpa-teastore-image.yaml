@@ -8,7 +8,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:

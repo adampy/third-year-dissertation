@@ -46,37 +46,42 @@ import sys
 def main():
     # Parse provided spec into a dict
     spec = json.loads(sys.stdin.read())
+    
+    with open("evaluate_input.json", "w") as f:
+        f.write(json.dumps(spec))
+    
     evaluate(spec)
+    
+def naive_evaluate(metric_spec) -> int:
+    # Extract total cpu usage
+    total_cpu = [int(pod['Value']) for pod in metric_spec["resource"]["pod_metrics_info"].values()]
+    total_requested_cpu = [int(request) for request in metric_spec["resource"]["requests"].values()]
+    
+    # Calculate average CPU utilization
+    avg_cpu = sum(total_cpu) / sum(total_requested_cpu)
+    
+    curr = metric_spec["current_replicas"]
+    if avg_cpu > 0.9 and curr < 10:
+        return curr + 2
+    elif avg_cpu > 0.8 and curr < 10:
+        return curr + 1
+    elif avg_cpu < 0.1 and curr > 2:
+        return curr - 2
+    elif avg_cpu < 0.2 and curr > 1:
+        return curr - 1
+    else:
+        return curr
 
 def evaluate(spec):
     try:
         # Get values from spec
         metric_spec = json.loads(spec["metrics"][0]["value"])
         
-        total_cpu = [int(pod['Value']) for pod in metric_spec["resource"]["pod_metrics_info"].values()]
-        total_requested_cpu = [int(request) for request in metric_spec["resource"]["requests"].values()]
-        
-        # Calculate average CPU utilization
-        avg_cpu = sum(total_cpu) / sum(total_requested_cpu)
-        
         # Based on average CPU utilization, adjust target replicas
-        evaluation = {}
-        evaluation["targetReplicas"] = metric_spec["current_replicas"]
-        if avg_cpu > 0.9 and evaluation["targetReplicas"] < 10:
-            evaluation["targetReplicas"] += 3
-        elif avg_cpu > 0.8 and evaluation["targetReplicas"] < 10:
-            evaluation["targetReplicas"] += 1
-        elif avg_cpu < 0.1 and evaluation["targetReplicas"] > 2:
-            evaluation["targetReplicas"] -= 3
-        elif avg_cpu < 0.2 and evaluation["targetReplicas"] > 1:
-            evaluation["targetReplicas"] -= 1
+        new_replicas = naive_evaluate(metric_spec)
             
         # Output evaluation as JSON to CPA resource
-        sys.stdout.write(json.dumps(evaluation))
-
-        # evaluation = {}
-        # evaluation["targetReplicas"] = 2
-        # sys.stdout.write(json.dumps(evaluation))
+        sys.stdout.write(json.dumps({"targetReplicas": new_replicas}))
             
     except ValueError as err:
         # If not an integer, output error

@@ -1,4 +1,4 @@
-apiVersion: custompodautoscaler.com/v1
+apiVersion: custompodautoscaler.com/v1autoscaler
 kind: CustomPodAutoscaler
 metadata:
   name: proactive-pod-autoscaler-teastore-auth
@@ -8,7 +8,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -30,7 +30,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -52,7 +52,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -74,7 +74,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -96,7 +96,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -118,7 +118,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
@@ -140,7 +140,7 @@ spec:
       containers:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:

@@ -13,7 +13,7 @@ import numpy as np
 
 import azure_blob
 
-LOOK_BACK = 10
+LOOK_BACK = 1
 SEED = 7
 EPOCHS = 10
 BATCH_SIZE = 1
@@ -55,12 +55,11 @@ if __name__ == "__main__":
     # plt.plot(webui_df["Timestamp"].values, webui_df["Value"].values)
     # plt.show()
     
-    dataset = webui_df["Value"]
-    dataset = dataset.astype('float32')
-    
     # --------------------------------
    
     # Now turn 1d float array into 2D np array
+    dataset = webui_df["Value"]
+    dataset = dataset.astype('float32')
     dataset = dataset.values.reshape(-1, 1)
     
     # Normalise dataset
@@ -80,16 +79,16 @@ if __name__ == "__main__":
     testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
     # Create and fit LSTM model
-    # model = Sequential()
-    # model.add(LSTM(50, input_shape=(1, LOOK_BACK), activation='relu'))
-    # model.add(Dense(50))
-    # model.add(Dense(1))
+    model = Sequential()
+    model.add(LSTM(50, input_shape=(1, LOOK_BACK), activation='relu'))
+    model.add(Dense(50))
+    model.add(Dense(1))
     
-    # model.compile(loss='mean_squared_error', optimizer='adam')
-    # model.fit(trainX, trainY, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=VERBOSITY)
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.fit(trainX, trainY, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=VERBOSITY)
     
     #azure_blob.load_blob_file("webui_lstm_model.keras")
-    model = load_model("webui_lstm_model.keras")
+    #model = load_model("webui_lstm_model.keras")
     
     # Inference
     train_predict = model.predict(trainX)
@@ -109,5 +108,5 @@ if __name__ == "__main__":
          
     #plot_predictions(dataset, train_predict, test_predict)
     
-    #model.save("webui_lstm_model.keras")
+    model.save("webui_lstm_model.keras")
     azure_blob.upload_blob_file("webui_lstm_model.keras")
