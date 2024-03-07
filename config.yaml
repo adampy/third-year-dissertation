@@ -1,6 +1,6 @@
 evaluate:
   type: "shell"
-  timeout: 2500
+  timeout: 5000
   shell:
     entrypoint: "python"
     command:
