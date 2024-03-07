@@ -1,2 +1,4 @@
 azure-storage-blob
 python-dotenv
+keras
+cffi # https://stackoverflow.com/questions/34370962/no-module-named-cffi-backend

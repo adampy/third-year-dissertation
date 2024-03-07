@@ -46,6 +46,7 @@ def plot_predictions(dataset, train_predict, test_predict):
     plt.plot(train_predict_plot)
     plt.plot(test_predict_plot)
     plt.show()
+    
 
 if __name__ == "__main__":
     start_date = datetime(2024, 3, 4, 16, 15, 0)
@@ -79,16 +80,16 @@ if __name__ == "__main__":
     testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
     # Create and fit LSTM model
-    model = Sequential()
-    model.add(LSTM(50, input_shape=(1, LOOK_BACK), activation='relu'))
-    model.add(Dense(50))
-    model.add(Dense(1))
+    # model = Sequential()
+    # model.add(LSTM(50, input_shape=(1, LOOK_BACK), activation='relu'))
+    # model.add(Dense(50))
+    # model.add(Dense(1))
     
-    model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=VERBOSITY)
+    # model.compile(loss='mean_squared_error', optimizer='adam')
+    # model.fit(trainX, trainY, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=VERBOSITY)
     
     #azure_blob.load_blob_file("webui_lstm_model.keras")
-    #model = load_model("webui_lstm_model.keras")
+    model = load_model("webui_lstm_model.keras")
     
     # Inference
     train_predict = model.predict(trainX)
@@ -108,5 +109,5 @@ if __name__ == "__main__":
          
     #plot_predictions(dataset, train_predict, test_predict)
     
-    model.save("webui_lstm_model.keras")
+    #model.save("webui_lstm_model.keras")    
     azure_blob.upload_blob_file("webui_lstm_model.keras")
