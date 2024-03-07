@@ -26,6 +26,6 @@ ENV configPath /app/config.yaml
 COPY config.yaml ./
 
 # Add config, evaluator and metric gathering Py scripts
-ADD config.yaml evaluate.py metric.py azure_blob.py /
+ADD config.yaml evaluate.py metric.py azure_blob.py lookback.py /
 
 CMD [ "/app/custom-pod-autoscaler" ]
