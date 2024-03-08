@@ -75,13 +75,11 @@ def naive_evaluate(metric_spec) -> int:
     else:
         return curr
     
-model_mapping = {
-    "teastore-webui": "webui",
-}
 def get_model_name(pod_name: str) -> str | None:
-    for key in model_mapping:
-        if key in pod_name:
-            return model_mapping[key]
+    models = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
+    for model in models:
+        if model in pod_name:
+            return model
     return None
 
 def new_evaluate(metric_spec) -> int:    
@@ -105,6 +103,9 @@ def new_evaluate(metric_spec) -> int:
             "window": window
         }
     )
+    if r.status_code != 200:
+        raise ValueError(f"Failed to get prediction: {r.status_code} {r.text}")
+    
     prediction = r.json()["prediction"]
 
     # Now we have the prediction, we can use it to adjust the target replicas
