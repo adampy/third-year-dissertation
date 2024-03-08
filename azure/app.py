@@ -8,9 +8,45 @@ app = Flask(__name__)
 
 
 class Model(Enum):
+    auth = "auth"
+    db = "db"
+    image = "image"
+    persistence = "persistence"
+    recommender = "recommender"
+    registry = "registry"
     webui = "webui"
 
 MODELS = {
+    Model.auth: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
+    Model.db: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
+    Model.image: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
+    Model.persistence: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
+    Model.recommender: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
+    Model.registry: {
+        "name": "webui_lstm_model-w10.keras",
+        "window": 10,
+        "model": None
+    },
     Model.webui: {
         "name": "webui_lstm_model-w10.keras",
         "window": 10,
