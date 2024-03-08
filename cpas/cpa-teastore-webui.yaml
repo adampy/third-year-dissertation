@@ -9,6 +9,9 @@ spec:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
         imagePullPolicy: Always
+        env:
+        - name: INFERENCE_URL
+          value: "http://inference-server-service:8080/predict"
       imagePullSecrets: # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret and https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#inspecting-the-secret-regcred
       - name: regcred
   scaleTargetRef:

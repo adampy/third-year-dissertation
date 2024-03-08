@@ -93,14 +93,11 @@ def new_evaluate(metric_spec) -> int:
     inference_url = environ.get("INFERENCE_URL")
     if not inference_url:
         raise ValueError("INFERENCE_URL not set")
-    with open("temp.txt", "w") as f:
-        f.write("meow")
+
     pod_name = list(metric_spec["resource"]["pod_metrics_info"].keys())[0] # Just take the first pod, we know they are from the same deployment
     newest_element = sum(total_cpu) / 1000
     lookback.append_window(pod_name, newest_element, 10)
     window = lookback.get_pod(pod_name)["lookback"]["data"]
-    with open("temp.txt", "w") as f:
-        f.write("awdaw")
     r = requests.post(
         inference_url,
         json={
@@ -108,15 +105,7 @@ def new_evaluate(metric_spec) -> int:
             "window": window
         }
     )
-    
-    
-    with open("temp.txt", "w") as f:
-        f.write(r.text)
-    
     prediction = r.json()["prediction"]
-    
-    with open("temp.txt", "w") as f:
-        f.write(f"Prediction: {prediction}\n")
 
     # Now we have the prediction, we can use it to adjust the target replicas
     # This is the scaling policy
