@@ -1,0 +1,42 @@
+# Adapted from: https://medium.com/featurepreneur/deploying-a-flask-app-to-kubernetes-f05c93866aff
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-server
+spec:
+  selector:
+    matchLabels:
+      app: inference-server
+  template:
+    metadata:
+      labels:
+        app: inference-server
+    spec:
+      containers:
+        - name: proactive-pod-autoscaler
+          image: adamc1234/proactive-pod-autoscaler:inference-server
+          imagePullPolicy: Always
+          env:
+          - name: AZURE_CONTAINER_NAME
+            value: "proactive-pod-autoscaler"
+          - name: AZURE_ACCOUNT_NAME
+            value: "sc21acstorage"
+          - name: AZURE_ACCOUNT_KEY
+            value: "SQdsCuQvdyiw8OZ1ypFuAn/KXTyHDdVxGO6P2F0FEA+nVb9kTFvsZvC0ieCTb/jtdNIH0foR5059+AStZWyygQ=="
+          ports:
+            - containerPort: 8080
+      imagePullSecrets: # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-pod-that-uses-your-secret and https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#inspecting-the-secret-regcred
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inference-server-service
+spec:
+  selector:
+    app: inference-server
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
