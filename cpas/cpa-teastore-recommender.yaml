@@ -9,12 +9,15 @@ spec:
       - name: proactive-pod-autoscaler
         image: adamc1234/proactive-pod-autoscaler:latest
         imagePullPolicy: Always
+        env:
+        - name: INFERENCE_URL
+          value: ${INFERENCE_URL}
       imagePullSecrets:
       - name: regcred
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: Deployment
-    name: teastore-recommender
+    kind: ReplicaSet
+    name: ${RECOMMENDER_REPLICASET_NAME}
   roleRequiresMetricsServer: true
   config:
     - name: interval
