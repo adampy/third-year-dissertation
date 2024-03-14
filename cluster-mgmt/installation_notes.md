@@ -27,9 +27,6 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 KUBECONFIG=$HOME/.kube/config
 ```
 
-# Installing Calico
-https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises
-
 # For adding a secret (allowing pulling from privare docker-hub repository)
 https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
 ```bash
