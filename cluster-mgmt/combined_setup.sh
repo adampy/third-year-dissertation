@@ -57,8 +57,3 @@ sudo apt-get install -y kubectl kubeadm kubelet
 # sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 # sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # KUBECONFIG=/etc/kubernetes/admin.conf
-
-# Install Calico operator and custom resource definitions
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/tigera-operator.yaml
-# Install necessary custom resource
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml
