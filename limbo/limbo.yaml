@@ -1,0 +1,21 @@
+# Make deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: limbo
+  labels:
+    app: limbo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: limbo
+  template:
+    metadata:
+      labels:
+        app: limbo
+    spec:
+      containers:
+      - name: limbo
+        image: limbo:latest
+        imagePullPolicy: IfNotPresent
