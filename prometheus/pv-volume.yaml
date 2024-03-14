@@ -1,8 +1,8 @@
-# Used for Prometheus
+# Used for Prometheus for persistent storage
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: task-pv-volume-1
+  name: prometheus-server-pv
   labels:
     type: local
 spec:
@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: task-pv-volume-2
+  name: alertmanager-pv
   labels:
     type: local
 spec:

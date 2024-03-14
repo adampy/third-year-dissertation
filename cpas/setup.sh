@@ -11,10 +11,10 @@ export REGISTRY_REPLICASET_NAME=$(kubectl get replicaset -l run=teastore-registr
 export WEBUI_REPLICASET_NAME=$(kubectl get replicaset -l run=teastore-webui -o jsonpath={..metadata.name})
 
 # Now run all CPAs after passing in the ReplicaSet names
-cat cpa-teastore-auth.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-db.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-image.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-persistence.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-recommender.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-registry.yaml | envsubst | kubectl apply -f -
-cat cpa-teastore-webui.yaml | envsubst | kubectl apply -f -
+cat auth.yaml | envsubst | kubectl apply -f -
+cat db.yaml | envsubst | kubectl apply -f -
+cat image.yaml | envsubst | kubectl apply -f -
+cat persistence.yaml | envsubst | kubectl apply -f -
+cat recommender.yaml | envsubst | kubectl apply -f -
+cat registry.yaml | envsubst | kubectl apply -f -
+cat webui.yaml | envsubst | kubectl apply -f -

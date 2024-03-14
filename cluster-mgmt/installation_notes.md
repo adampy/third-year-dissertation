@@ -49,6 +49,12 @@ https://stackoverflow.com/questions/45805483/kubernetes-pods-cant-resolve-hostna
 kubectl -n kube-system rollout restart deployment coredns
 ```
 
+# For installing Helm
+Obtained from: https://helm.sh/docs/intro/install/#from-script
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+
 # For installing Prometheus using Helm
 https://helm.sh/docs/intro/install/#from-script
 https://github.com/prometheus-community/helm-charts / https://www.youtube.com/watch?v=Nng7z7xGh7g
