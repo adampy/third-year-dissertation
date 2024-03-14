@@ -56,6 +56,8 @@ kubectl -n kube-system rollout restart deployment coredns
 https://helm.sh/docs/intro/install/#from-script
 https://github.com/prometheus-community/helm-charts / https://www.youtube.com/watch?v=Nng7z7xGh7g
 
+For solving the issue of only 1/2 `prometheus-server` pods starting, and the other one being stuck in CrashLoopBackOff https://github.com/helm/charts/issues/15742#issuecomment-544776102
+
 # For exposing Prometheus using Docker Desktop
 ```bash
 kubectl port-forward service/prometheus-server 9090:80
