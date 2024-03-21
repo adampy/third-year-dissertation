@@ -1,24 +1,41 @@
 from datetime import datetime
-import pandas as pd
+from os import listdir
 from pod_data import PodData
+from matplotlib import pyplot as plt
 
-URL = "http://172.187.146.126:31767"
-START_TIME = datetime(2024, 3, 4, 15, 0, 0)
-END_TIME = datetime(2024, 3, 4, 18, 15, 0)
-QUERY = 'sum(rate(container_cpu_usage_seconds_total{pod!=""}[5m]))by(pod)'
+URL = "http://20.26.238.197:30900/"
+START_TIME = datetime(2024, 3, 21, 21, 58, 0)
+END_TIME = datetime(2024, 3, 21, 22, 58, 0)
+QUERY = 'sum(rate(container_cpu_usage_seconds_total{pod=~"teastore.*|limbo.*"}[5m])) by (pod)' #'sum(rate(container_cpu_usage_seconds_total{pod!=""}[5m]))by(pod)'
+EXPERIMENT = "lp_c100_s900_r4"
+
+def save_results():
+    # Query data from Prometheus
+    data = PodData.from_query_range(URL, QUERY, START_TIME, END_TIME, 15)
+    
+    # Now save all to csv
+    for pod in data:
+        pod.save_to_csv(f"results/{EXPERIMENT}/{pod.name}.csv")
+        
+def load_results():
+    # Find all pods in directory
+    pods = listdir(f"results/{EXPERIMENT}")
+    
+    # Then load them into data
+    data = []
+    for pod in pods:
+        data.append(PodData.from_csv(f"results/{EXPERIMENT}/{pod}"))
+    return data
+
+def plot_results(data):
+    # Combine all data into one plot
+    for pod in data:
+        df = pod.as_df()
+        plt.plot(df["Timestamp"].values, df["Value"].values, label=pod.name)
+        plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
-    # Open from file
-    webui = PodData.from_csv("webui-05032024.csv")
+    results = load_results()
+    plot_results(results)
     
-    # Or get from Prometheus
-    #data = PodData.from_query_range(URL, QUERY, START_TIME, END_TIME, 15)
-    #webui = [pod for pod in data if 'webui' in pod.name][0]
-    
-    # Plot data
-    start_date = datetime(2024, 3, 4, 16, 15, 0)
-    end_date = datetime(2024, 3, 4, 18, 0, 0)
-    #webui.plot(start_date=start_date, end_date=end_date)
-    print(webui.as_df(start_date=start_date, end_date=end_date))
-    # Save to file
-    #webui.save_to_csv(f"{webui.name}.csv")
