@@ -16,6 +16,8 @@ spec:
         app: limbo
     spec:
       containers:
-      - name: limbo
-        image: limbo:latest
-        imagePullPolicy: IfNotPresent
+      - name: proactive-pod-autoscaler
+        image: adamc1234/proactive-pod-autoscaler:limbo
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: regcred
