@@ -1,3 +1,4 @@
+# Based on the library "mockseries" (https://mockseries.catheu.tech/)
 from mockseries.trend import LinearTrend
 from mockseries.seasonality import SinusoidalSeasonality
 from mockseries.noise import GaussianNoise
