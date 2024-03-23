@@ -46,6 +46,6 @@ if __name__ == "__main__":
     timeseries = trend + seasonality + noise
 
     #timeseries.preview_minute(LENGTH / 60)
-    #timeseries.preview_hour(LENGTH / 60 / 60)
+    timeseries.preview_hour(LENGTH / 60 / 60)
     
-    save_timeseries(timeseries)
+    #save_timeseries(timeseries)
