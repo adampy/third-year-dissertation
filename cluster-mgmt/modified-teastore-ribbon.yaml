@@ -113,6 +113,13 @@ spec:
           value: "teastore-db"
         - name: DB_PORT
           value: "3306"
+        resources:
+          limits:
+            cpu: 800m # Max is 0.8vCPUs
+            memory: 1024M
+          requests:
+            cpu: 800m # Request 0.8vCPUs
+            memory: 1024M
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -142,12 +149,13 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
-
         resources:
-            limits:
-              cpu: 1200m # Max is 1.2vCPUs
-            requests:
-              cpu: 1200m # Request 1.2vCPUs
+          limits:
+            cpu: 800m # Max is 0.8vCPUs
+            memory: 1024M
+          requests:
+            cpu: 800m # Request 0.8vCPUs
+            memory: 1024M
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -177,6 +185,13 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        resources:
+          limits:
+            cpu: 1000m # Max is 1.0vCPUs
+            memory: 1024M
+          requests:
+            cpu: 1000m # Request 1.0vCPUs
+            memory: 1024M
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -206,6 +221,13 @@ spec:
           value: "true"
         - name: REGISTRY_HOST
           value: "teastore-registry"
+        resources:
+          limits:
+            cpu: 600m # Max is 1.0vCPUs
+            memory: 1024M
+          requests:
+            cpu: 600m # Request 1.0vCPUs
+            memory: 1024M
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -237,9 +259,11 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 1200m # Max is 1.2vCPUs
+            cpu: 1000m # Max is 1.0vCPUs
+            memory: 1024M
           requests:
-            cpu: 1200m # Request 1.2vCPUs
+            cpu: 1000m # Request 1.0vCPUs
+            memory: 1024M
 ---
 apiVersion: v1
 kind: Service
@@ -252,6 +276,7 @@ spec:
   type: ClusterIP
   ports:
   - port: 8080
+    #nodePort: 30800
     protocol: TCP
   selector:
     run: teastore-webui
