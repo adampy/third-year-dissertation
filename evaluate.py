@@ -6,8 +6,10 @@ import sys
 import lookback
 import requests
 from os import environ
+import math
 
-#from .models import CollatedMetrics
+WINDOW_LENGTH = 15
+THRESHOLD = 0.7
 
 # EXAMPLE SPEC INPUT
 # {
@@ -55,26 +57,6 @@ def main():
     
     evaluate(spec)
     
-def naive_evaluate(metric_spec) -> int:
-    # Extract total cpu usage
-    total_cpu = [int(pod['Value']) for pod in metric_spec["resource"]["pod_metrics_info"].values()]
-    total_requested_cpu = [int(request) for request in metric_spec["resource"]["requests"].values()]
-    
-    # Calculate average CPU utilization
-    avg_cpu = sum(total_cpu) / sum(total_requested_cpu)
-    
-    curr = metric_spec["current_replicas"]
-    if avg_cpu > 0.9 and curr < 10:
-        return curr + 2
-    elif avg_cpu > 0.8 and curr < 10:
-        return curr + 1
-    elif avg_cpu < 0.1 and curr > 2:
-        return curr - 2
-    elif avg_cpu < 0.2 and curr > 1:
-        return curr - 1
-    else:
-        return curr
-    
 def get_model_name(pod_name: str) -> str | None:
     models = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
     for model in models:
@@ -82,7 +64,7 @@ def get_model_name(pod_name: str) -> str | None:
             return model
     return None
 
-def new_evaluate(metric_spec) -> int:    
+def new_evaluate(metric_spec) -> int:
     # Extract total cpu usage
     total_cpu = [int(pod['Value']) for pod in metric_spec["resource"]["pod_metrics_info"].values()]
     total_requested_cpu = [int(request) for request in metric_spec["resource"]["requests"].values()]
@@ -92,31 +74,31 @@ def new_evaluate(metric_spec) -> int:
     if not inference_url:
         raise ValueError("INFERENCE_URL not set")
 
+    # Get service name
     pod_name = list(metric_spec["resource"]["pod_metrics_info"].keys())[0] # Just take the first pod, we know they are from the same deployment
-    newest_element = sum(total_cpu) / 1000
-    lookback.append_window(pod_name, newest_element, 10)
-    window = lookback.get_pod(pod_name)["lookback"]["data"]
+    service_name = get_model_name(pod_name)
+    
+    # Use lookback window to get inference from inference server
+    newest_element = sum(total_cpu) / 1000 # Convert from millicores to cores
+    lookback.append_window(service_name, newest_element, WINDOW_LENGTH)
+    window = lookback.get_pod(service_name)["lookback"]["data"]
     r = requests.post(
         inference_url,
         json={
-            "model": get_model_name(pod_name),
+            "model": service_name,
             "window": window
         }
     )
     if r.status_code != 200:
         raise ValueError(f"Failed to get prediction: {r.status_code} {r.text}")
-    
     prediction = r.json()["prediction"]
 
     # Now we have the prediction, we can use it to adjust the target replicas
-    # This is the scaling policy
+    # This is the scaling policy - we use the same formula as K8 but adjusted for prediction
     curr = metric_spec["current_replicas"]
-    if prediction > 0.7 * sum(total_requested_cpu) and curr < 5:
-        return curr + 1
-    elif prediction < 0.3 * sum(total_requested_cpu) and curr > 1:
-        return curr - 1
-    else:
-        return curr
+    usage = prediction / sum(total_requested_cpu)
+    new_replicas = math.ceil(curr * (usage / THRESHOLD))
+    return new_replicas
 
 def evaluate(spec):
     try:

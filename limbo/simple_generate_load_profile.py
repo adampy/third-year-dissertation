@@ -9,15 +9,15 @@ import csv
 TIME_UNIT = timedelta(seconds=1)
 LENGTH = 60 * 60 * 2 # 2 hours
 
-TREND_BEGIN = 100
-TREND_END = 100
+TREND_BEGIN = 150
+TREND_END = 150
 TREND_COEFFICIENT = (TREND_END - TREND_BEGIN) / LENGTH
 
 NOISE_MEAN = 0
-NOISE_STD = 3
+NOISE_STD = 30
 
-SEASONALITY_AMP = 70
-SEASONALITY_PERIOD = timedelta(minutes=60)
+SEASONALITY_AMP = 100
+SEASONALITY_PERIOD = timedelta(minutes=30)
 
 def save_timeseries(timeseries):
     # Generate data points
@@ -34,8 +34,9 @@ def save_timeseries(timeseries):
     with open(output, "w") as f:
         writer = csv.writer(f)
         for i in range(len(ts_values)):
-            vlaue = round(ts_values[i])
-            writer.writerow([i, vlaue])
+            value = round(ts_values[i])
+            value = max(0, value) # Ensure no negative values
+            writer.writerow([i, value])
 
 if __name__ == "__main__":
 
@@ -48,4 +49,4 @@ if __name__ == "__main__":
     #timeseries.preview_minute(LENGTH / 60)
     timeseries.preview_hour(LENGTH / 60 / 60)
     
-    #save_timeseries(timeseries)
+    save_timeseries(timeseries)

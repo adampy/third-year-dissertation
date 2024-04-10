@@ -18,38 +18,38 @@ class Model(Enum):
 
 MODELS = {
     Model.auth: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.db: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.image: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.persistence: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.recommender: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.registry: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     },
     Model.webui: {
-        "name": "webui_lstm_model-w10.keras",
-        "window": 10,
+        "name": "webui_lstm_model-w15.keras",
+        "window": 15,
         "model": None
     }
 }

@@ -13,13 +13,13 @@ import numpy as np
 
 import azure_blob
 
-LOOK_BACK = 10
+LOOK_BACK = 15
 SEED = 7
 EPOCHS = 10
 BATCH_SIZE = 1
 TEST_SET_SIZE = 0.33
 
-VERBOSITY = 0 #2
+VERBOSITY = 2
 
 # fix random seed for reproducibility
 tf.random.set_seed(SEED)
@@ -113,5 +113,5 @@ if __name__ == "__main__":
          
     #plot_predictions(dataset, train_predict, test_predict)
     
-    model.save("webui_lstm_model-w10.keras")
-    azure_blob.upload_blob_file("webui_lstm_model-w10.keras")
+    model.save("webui_lstm_model-w15.keras")
+    azure_blob.upload_blob_file("webui_lstm_model-w15.keras")

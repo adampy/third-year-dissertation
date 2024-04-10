@@ -1,19 +1,17 @@
-from datetime import datetime
-from os import listdir
-from pod_data import PodData
 from matplotlib import pyplot as plt
-from dataset_scraper import save_results, load_results, plot_results
+from dataset_scraper import load_results
 import pandas as pd
 
-EXPERIMENT = "lp_b100_e100_s7200_r3_sa70_sp3600"
-SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
+EXPERIMENT = "lp_b200_e200_s7200_r3_sa70_sp3600"
+#SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
+SERVICES = ["auth", "image", "persistence", "recommender", "webui"]
 SERVICE_CPU_LIMITS = {
-    "auth": 800,
+    "auth": 500,
     "db": 800,
-    "image": 1000,
-    "persistence": 800,
-    "recommender": 600,
-    "webui": 1000,
+    "image": 500,
+    "persistence": 500,
+    "recommender": 200,
+    "webui": 900,
     "registry": 800,
 }
 
@@ -48,7 +46,7 @@ if __name__ == "__main__":
     data = load_results(EXPERIMENT)
     data_by_service = {service: [] for service in SERVICES}
     for pod in data:
-        if "limbo" in pod.name: continue
+        if any(service in pod.name for service in SERVICES) == False: continue # Exluce other services
         data_by_service[pod.name.split("-")[1]].append(pod)
         
     # Now plot all services in subplots
