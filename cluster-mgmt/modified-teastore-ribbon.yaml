@@ -187,10 +187,10 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 1000m # Max is 1.0vCPUs
+            cpu: 900m # Max is 1.0vCPUs
             memory: 1024M
           requests:
-            cpu: 1000m # Request 1.0vCPUs
+            cpu: 900m # Request 1.0vCPUs
             memory: 1024M
 ---
 apiVersion: apps/v1
@@ -259,10 +259,10 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 1000m # Max is 1.0vCPUs
+            cpu: 900m # Max is 1.0vCPUs
             memory: 1024M
           requests:
-            cpu: 1000m # Request 1.0vCPUs
+            cpu: 900m # Request 1.0vCPUs
             memory: 1024M
 ---
 apiVersion: v1
