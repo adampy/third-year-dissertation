@@ -115,10 +115,10 @@ spec:
           value: "3306"
         resources:
           limits:
-            cpu: 800m # Max is 0.8vCPUs
+            cpu: 500m # Max is 0.5vCPUs
             memory: 1024M
           requests:
-            cpu: 800m # Request 0.8vCPUs
+            cpu: 500m # Request 0.5vCPUs
             memory: 1024M
 ---
 apiVersion: apps/v1
@@ -151,10 +151,10 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 800m # Max is 0.8vCPUs
+            cpu: 500m # Max is 0.5vCPUs
             memory: 1024M
           requests:
-            cpu: 800m # Request 0.8vCPUs
+            cpu: 500m # Request 0.5vCPUs
             memory: 1024M
 ---
 apiVersion: apps/v1
@@ -187,10 +187,10 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 1000m # Max is 1.0vCPUs
+            cpu: 500m # Max is 0.5vCPUs
             memory: 1024M
           requests:
-            cpu: 1000m # Request 1.0vCPUs
+            cpu: 500m # Request 0.5vCPUs
             memory: 1024M
 ---
 apiVersion: apps/v1
@@ -223,10 +223,10 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 600m # Max is 1.0vCPUs
+            cpu: 200m # Max is 0.2vCPUs
             memory: 1024M
           requests:
-            cpu: 600m # Request 1.0vCPUs
+            cpu: 200m # Request 0.2vCPUs
             memory: 1024M
 ---
 apiVersion: apps/v1
@@ -259,11 +259,11 @@ spec:
           value: "teastore-registry"
         resources:
           limits:
-            cpu: 1000m # Max is 1.0vCPUs
-            memory: 1024M
+            cpu: 900m # Max is 0.9vCPUs
+            memory: 2048M
           requests:
-            cpu: 1000m # Request 1.0vCPUs
-            memory: 1024M
+            cpu: 900m # Request 0.9vCPUs
+            memory: 2048M
 ---
 apiVersion: v1
 kind: Service
