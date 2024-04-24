@@ -86,12 +86,16 @@ def new_evaluate(metric_spec) -> int:
         inference_url,
         json={
             "model": service_name,
-            "window": window
+            "window": window,
+            "horizon": 1
         }
     )
     if r.status_code != 200:
         raise ValueError(f"Failed to get prediction: {r.status_code} {r.text}")
-    prediction = r.json()["prediction"]
+
+    # Get prediction from horizon
+    horizon = r.json()["horizon"]
+    prediction = horizon[-1] # Use the last value in horizon as prediction
 
     # Now we have the prediction, we can use it to adjust the target replicas
     # This is the scaling policy - we use the same formula as K8 but adjusted for prediction
