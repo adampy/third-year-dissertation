@@ -1,8 +1,8 @@
 from matplotlib import pyplot as plt
-from prometheus.dataset_scraper import load_results
+from dataset_scraper import load_results
 import pandas as pd
 
-EXPERIMENT = "lp_b200_e200_s7200_r3_sa70_sp3600"
+EXPERIMENT = "lp_b150_e150_s7200_r30_sa100_sp1800"
 #SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
 SERVICES = ["auth", "image", "persistence", "recommender", "webui"]
 SERVICE_CPU_LIMITS = {
@@ -70,6 +70,20 @@ if __name__ == "__main__":
         ax.plot(total_cpu_usage["Timestamp"].values, total_cpu_usage["Value"].values, label="Total CPU Usage")
         ax.set_title(service)
         ax.legend()
+
+        # Calculate the  evaluation metrics (under and over provisioning accuracy and timeshare)
+        combined_df["Total"] = total_cpu_usage["Value"]
+        combined_df["Overprov"] = combined_df["Total"] - combined_df["Value"]
+        #ax.plot(combined_df["Timestamp"].values, combined_df["Overprov"].values, label="Overprovisioning")
+        ax.legend()
+
+        accuracy_O = combined_df["Value"].sum() / len(combined_df)
+        accuracy_U = -combined_df[combined_df["Value"] < 0]["Value"].sum() / len(combined_df)
+        timeshare_O = len(combined_df[combined_df["Value"] > 0]) / len(combined_df)
+        timeshare_U = len(combined_df[combined_df["Value"] < 0]) / len(combined_df)
+
+        # combined total cpu usage into combined_df
+        print(f"{EXPERIMENT}/{service} | Accuracy_U: {accuracy_U} | Accuracy_O: {accuracy_O} | Timeshare_U: {timeshare_U} | Timeshare_O: {timeshare_O}")
 
     # Finally show all plots
     plt.show()
