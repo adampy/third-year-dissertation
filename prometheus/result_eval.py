@@ -1,5 +1,5 @@
 from matplotlib import pyplot as plt
-from dataset_scraper import load_results
+from prometheus.dataset_scraper import load_results
 import pandas as pd
 
 EXPERIMENT = "lp_b200_e200_s7200_r3_sa70_sp3600"
@@ -41,13 +41,17 @@ def plot_total_cpu_usage(dfs, service_usage):
     combined_df.sort_values(by="Timestamp", inplace=True)
     return combined_df
 
-if __name__ == "__main__":
-    # Plot each service, we need to first group them
-    data = load_results(EXPERIMENT)
+def get_results_by_service(experiment) -> dict[str, list['PodData']]:
+    data = load_results(experiment)
     data_by_service = {service: [] for service in SERVICES}
     for pod in data:
         if any(service in pod.name for service in SERVICES) == False: continue # Exluce other services
         data_by_service[pod.name.split("-")[1]].append(pod)
+    return data_by_service
+
+if __name__ == "__main__":
+    # Plot each service, we need to first group them
+    data_by_service = get_results_by_service(EXPERIMENT)
         
     # Now plot all services in subplots
     for service, pods in data_by_service.items():
