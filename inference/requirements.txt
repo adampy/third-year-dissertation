@@ -1,6 +1,6 @@
 flask
-tensorflow
-keras
+tensorflow==2.16.1
+#keras
 azure-storage-blob
 python-dotenv
 cffi # https://stackoverflow.com/questions/34370962/no-module-named-cffi-backend

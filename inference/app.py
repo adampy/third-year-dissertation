@@ -2,7 +2,7 @@ from flask import Flask, request
 from enum import Enum
 import azure_blob
 import numpy as np
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 
@@ -37,7 +37,7 @@ MODELS = {
     },
     Model.webui: {
         "name": "webui_lstm_model-w15.keras",
-        "window": 10,
+        "window": 15,
         "model": None
     }
 }
