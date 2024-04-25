@@ -100,8 +100,12 @@ def new_evaluate(metric_spec) -> int:
     # Now we have the prediction, we can use it to adjust the target replicas
     # This is the scaling policy - we use the same formula as K8 but adjusted for prediction
     curr = metric_spec["current_replicas"]
-    usage = prediction / sum(total_requested_cpu)
+    usage = prediction / (sum(total_requested_cpu) / 1000) # Convert total into millicores
     new_replicas = math.ceil(curr * (usage / THRESHOLD))
+    
+    with open("evaluate_output.json", "w") as f:
+        f.write(f"Prediction: {prediction}, current replicas: {curr}, usage: {usage}, new replicas: {new_replicas}")
+    
     return new_replicas
 
 def evaluate(spec):
