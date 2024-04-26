@@ -16,6 +16,6 @@ y = [point[1] for point in data]
 plt.plot(x, y, marker='o', linestyle='-')
 plt.title('Requests per second over time')
 plt.xlabel('Time (s)')
-plt.ylabel('Requests')
+plt.ylabel('Requests per second')
 plt.grid(True)
 plt.show()
