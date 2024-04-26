@@ -104,8 +104,8 @@ def new_evaluate(metric_spec) -> int:
     usage = prediction / (sum(total_requested_cpu) / 1000) # Convert total into millicores
     new_replicas = math.ceil(curr * (usage / THRESHOLD))
     
-    with open("evaluate_output.json", "w") as f:
-        f.write(f"Prediction: {prediction}, current replicas: {curr}, usage: {usage}, new replicas: {new_replicas}")
+    with open("evaluate_output.json", "a+") as f:
+        f.write(f"Total requested: {(sum(total_requested_cpu) / 1000)}, prediction: {prediction}, current replicas: {curr}, usage: {usage}, new replicas: {new_replicas}\n")
     
     return new_replicas
 

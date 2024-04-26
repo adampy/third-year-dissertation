@@ -8,6 +8,9 @@ export PERSISTENCE_REPLICASET_NAME=$(kubectl get replicaset -l run=teastore-pers
 export RECOMMENDER_REPLICASET_NAME=$(kubectl get replicaset -l run=teastore-recommender -o jsonpath={..metadata.name})
 export WEBUI_REPLICASET_NAME=$(kubectl get replicaset -l run=teastore-webui -o jsonpath={..metadata.name})
 
+# Install CPA
+kubectl apply -f https://github.com/jthomperoo/custom-pod-autoscaler-operator/releases/download/v1.4.0/cluster.yaml
+
 # Now run all CPAs after passing in the ReplicaSet names
 cat auth.yaml | envsubst | kubectl apply -f -
 cat image.yaml | envsubst | kubectl apply -f -

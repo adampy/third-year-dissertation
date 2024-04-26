@@ -10,14 +10,14 @@ TIME_UNIT = timedelta(seconds=1)
 LENGTH = 60 * 60 * 2 # 2 hours
 
 TREND_BEGIN = 150
-TREND_END = 150
+TREND_END = 400
 TREND_COEFFICIENT = (TREND_END - TREND_BEGIN) / LENGTH
 
 NOISE_MEAN = 0
-NOISE_STD = 30
+NOISE_STD = 5
 
-SEASONALITY_AMP = 100
-SEASONALITY_PERIOD = timedelta(minutes=30)
+SEASONALITY_AMP = 15
+SEASONALITY_PERIOD = timedelta(minutes=5)
 
 def save_timeseries(timeseries):
     # Generate data points
