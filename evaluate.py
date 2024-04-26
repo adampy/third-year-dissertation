@@ -10,6 +10,7 @@ import math
 
 WINDOW_LENGTH = 15
 THRESHOLD = 0.7
+HORIZON = 1
 
 # EXAMPLE SPEC INPUT
 # {
@@ -87,7 +88,7 @@ def new_evaluate(metric_spec) -> int:
         json={
             "model": service_name,
             "window": window,
-            "horizon": 1
+            "horizon": HORIZON
         }
     )
     if r.status_code != 200:

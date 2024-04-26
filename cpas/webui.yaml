@@ -16,8 +16,8 @@ spec:
       - name: regcred
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: ReplicaSet
-    name: ${WEBUI_REPLICASET_NAME} # This is substituted in through envsubst (in ./setup.sh) - https://stackoverflow.com/questions/48296082/how-to-set-dynamic-values-with-kubernetes-yaml-file
+    kind: Deployment #ReplicaSet
+    name: teastore-webui #${WEBUI_REPLICASET_NAME} # This is substituted in through envsubst (in ./setup.sh) - https://stackoverflow.com/questions/48296082/how-to-set-dynamic-values-with-kubernetes-yaml-file
   roleRequiresMetricsServer: true
   config:
     - name: interval

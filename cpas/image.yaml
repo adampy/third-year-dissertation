@@ -16,8 +16,8 @@ spec:
       - name: regcred
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: ReplicaSet
-    name: ${IMAGE_REPLICASET_NAME}
+    kind: Deployment #ReplicaSet
+    name: teastore-image #${IMAGE_REPLICASET_NAME}
   roleRequiresMetricsServer: true
   config:
     - name: interval
