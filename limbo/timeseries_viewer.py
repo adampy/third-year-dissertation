@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 
 # Read data from file
-filename = "lp_b150_e150_s7200_r30_sa100_sp1800.csv"
+filename = "lp_b150_e400_s7200_r5_sa15_sp300.csv"
 data = []
 with open(filename, 'r') as file:
     for line in file:
+        if not line or line == "\n": continue
         x, y = map(int, line.strip().split(','))
         data.append((x, y))
 
