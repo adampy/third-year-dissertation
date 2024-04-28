@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from dataset_scraper import load_results
 import pandas as pd
 
-EXPERIMENT = "lp_b150_e150_s7200_r30_sa100_sp1800"
+EXPERIMENT = "ppah1e100_lp_b150_e400_s7200_r5_sa15_sp300"
 #SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
 SERVICES = ["auth", "image", "persistence", "recommender", "webui"]
 SERVICE_CPU_LIMITS = {
@@ -49,6 +49,12 @@ def get_results_by_service(experiment) -> dict[str, list['PodData']]:
         data_by_service[pod.name.split("-")[1]].append(pod)
     return data_by_service
 
+def calculate_effective_cost(combined_df, vm_cost_per_hour, vcpu_per_node, interval):
+    vcpu_cost_per_hour = vm_cost_per_hour / vcpu_per_node
+    vcpu_cost_per_interval = interval * vcpu_cost_per_hour / 3600
+    effective_cost = combined_df["Total"].sum() * vcpu_cost_per_interval
+    return effective_cost
+
 if __name__ == "__main__":
     # Plot each service, we need to first group them
     data_by_service = get_results_by_service(EXPERIMENT)
@@ -63,10 +69,10 @@ if __name__ == "__main__":
         
         # Plot each pod
         for pod_df in pod_dfs:
-            ax.plot(pod_df["Timestamp"].values, pod_df["Value"].values)
+            pass#ax.plot(pod_df["Timestamp"].values, pod_df["Value"].values)
             
         # Plot combined and total cpu usage
-        ax.plot(combined_df["Timestamp"].values, combined_df["Value"].values, label="Combined")
+        #ax.plot(combined_df["Timestamp"].values, combined_df["Value"].values, label="Combined")
         ax.plot(total_cpu_usage["Timestamp"].values, total_cpu_usage["Value"].values, label="Total CPU Usage")
         ax.set_title(service)
         ax.legend()
@@ -82,8 +88,11 @@ if __name__ == "__main__":
         timeshare_O = len(combined_df[combined_df["Value"] > 0]) / len(combined_df)
         timeshare_U = len(combined_df[combined_df["Value"] < 0]) / len(combined_df)
 
-        # combined total cpu usage into combined_df
-        print(f"{EXPERIMENT}/{service} | Accuracy_U: {accuracy_U} | Accuracy_O: {accuracy_O} | Timeshare_U: {timeshare_U} | Timeshare_O: {timeshare_O}")
+        # Calculate effective cost (in pence)
+        effective_cost = calculate_effective_cost(combined_df, 7, 2, 15)
+
+        #print(f"{EXPERIMENT}/{service} | Accuracy_U: {accuracy_U} | Accuracy_O: {accuracy_O} | Timeshare_U: {timeshare_U} | Timeshare_O: {timeshare_O} | | Effective cost: {round(effective_total_cpu, 2)}p")
+        print(f"{EXPERIMENT}/{service} | Accuracy_O: {accuracy_O} | Effective cost: {round(effective_cost, 2)}p")
 
     # Finally show all plots
     plt.show()
