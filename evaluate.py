@@ -59,11 +59,11 @@ def main():
     evaluate(spec)
     
 def get_model_name(pod_name: str) -> str | None:
-    models = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
+    models = ["auth", "image", "persistence", "recommender", "webui"]
     for model in models:
         if model in pod_name:
             return model
-    return None
+    raise ValueError(f"Model not found in pod name {pod_name}")
 
 def new_evaluate(metric_spec) -> int:
     # Extract total cpu usage
