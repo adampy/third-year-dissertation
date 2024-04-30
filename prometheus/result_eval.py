@@ -2,8 +2,7 @@ from matplotlib import pyplot as plt
 from dataset_scraper import load_results
 import pandas as pd
 
-EXPERIMENT = "ppah4e100_lp_b250_e250_s1800_r30_sa0_sp300"
-#SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
+EXPERIMENT = "ppah1e100_lp_b150_e400_s7200_r5_sa15_sp300"
 SERVICES = ["auth", "image", "persistence", "recommender", "webui"]
 SERVICE_CPU_LIMITS = {
     "auth": 500,
@@ -58,6 +57,8 @@ if __name__ == "__main__":
     data_by_service = get_results_by_service(EXPERIMENT)
         
     # Now plot all services in subplots
+    overall_avg_pod_lifetime = 0
+    overall_number_of_pods = 0
     for service, pods in data_by_service.items():
         # Combine dataframes
         fig, ax = plt.subplots()
@@ -99,12 +100,21 @@ if __name__ == "__main__":
         max_pods = round(max_pods)
         avg_pod_lifetime = 0
         for pod in pod_dfs:
-            avg_pod_lifetime += (pod["Timestamp"].max() - pod["Timestamp"].min()).total_seconds()
+            # Add to local service avg
+            pod_lifetime = (pod["Timestamp"].max() - pod["Timestamp"].min()).total_seconds()
+            avg_pod_lifetime += pod_lifetime
+            
+            # And add to global avg
+            overall_avg_pod_lifetime += pod_lifetime
+            overall_number_of_pods += 1
+            
         avg_pod_lifetime /= len(pod_dfs)
         avg_pod_lifetime = round(avg_pod_lifetime / 60, 2)
 
         #print(f"{EXPERIMENT}/{service} | Accuracy_U: {accuracy_U} | Accuracy_O: {accuracy_O} | Timeshare_U: {timeshare_U} | Timeshare_O: {timeshare_O} | | Effective cost: {round(effective_total_cpu, 2)}p")
         print(f"{EXPERIMENT}/{service} | Accuracy_O: {accuracy_O} | Effective cost: {round(effective_cost, 2)}p | Max no. of pods: {max_pods} | Avg pod lifetime: {avg_pod_lifetime}mins")
+
+    print(f"Average pod lifetime: {round((overall_avg_pod_lifetime / overall_number_of_pods) / 60, 2)}mins")
 
     # Finally show all plots
     plt.show()

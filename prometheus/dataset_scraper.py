@@ -1,13 +1,13 @@
 from datetime import datetime
 from os import listdir
-from prometheus.pod_data import PodData
+from pod_data import PodData
 from matplotlib import pyplot as plt
 
 URL = "http://20.26.238.197:30900/"
-START_TIME = datetime(2024, 4, 12, 15, 45, 0)
-END_TIME = datetime(2024, 4, 12, 20, 00, 0)
+START_TIME = datetime(2024, 4, 30, 12, 37, 0)
+END_TIME = datetime(2024, 4, 30, 14, 50, 0)
 QUERY = 'sum(rate(container_cpu_usage_seconds_total{pod=~"teastore.*|limbo.*"}[5m])) by (pod)' #'sum(rate(container_cpu_usage_seconds_total{pod!=""}[5m]))by(pod)'
-EXPERIMENT = "lp_b200_e200_s7200_r3_sa70_sp3600"
+EXPERIMENT = "ppah1e100_lp_b150_e400_s7200_r5_sa15_sp300"
 
 def save_results(url, query, start_time, end_time, experiment_name):
     # Query data from Prometheus
@@ -15,7 +15,7 @@ def save_results(url, query, start_time, end_time, experiment_name):
     
     # Now save all to csv
     for pod in data:
-        pod.save_to_csv(f"results/{experiment_name}/{pod.name}.csv")
+        pod.save_to_csv(f"prometheus/results/{experiment_name}/{pod.name}.csv")
         
 def load_results(experiment_name) -> list[PodData]:
     # Find all pods in directory
@@ -24,7 +24,7 @@ def load_results(experiment_name) -> list[PodData]:
     # Then load them into data
     data = []
     for pod in pods:
-        data.append(PodData.from_csv(f"prometheus/results/{EXPERIMENT}/{pod}"))
+        data.append(PodData.from_csv(f"prometheus/results/{experiment_name}/{pod}"))
     return data
 
 def plot_results(data):

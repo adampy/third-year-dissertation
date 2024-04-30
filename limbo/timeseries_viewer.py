@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 # Read data from file
-filename = "lp_b150_e400_s7200_r5_sa15_sp300.csv"
+filename = "lp_b250_e250_s1800_r30_sa0_sp300.csv"
 data = []
 with open(filename, 'r') as file:
     for line in file:
