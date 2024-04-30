@@ -2,17 +2,15 @@ from matplotlib import pyplot as plt
 from dataset_scraper import load_results
 import pandas as pd
 
-EXPERIMENT = "ppah1e100_lp_b150_e400_s7200_r5_sa15_sp300"
+EXPERIMENT = "ppah4e100_lp_b250_e250_s1800_r30_sa0_sp300"
 #SERVICES = ["auth", "db", "image", "persistence", "recommender", "registry", "webui"]
 SERVICES = ["auth", "image", "persistence", "recommender", "webui"]
 SERVICE_CPU_LIMITS = {
     "auth": 500,
-    "db": 800,
     "image": 500,
     "persistence": 500,
     "recommender": 200,
     "webui": 900,
-    "registry": 800,
 }
 
 def sum_into_combined_df(dfs):
@@ -68,20 +66,25 @@ if __name__ == "__main__":
         total_cpu_usage = plot_total_cpu_usage(pod_dfs, SERVICE_CPU_LIMITS[service])
         
         # Plot each pod
-        for pod_df in pod_dfs:
-            pass#ax.plot(pod_df["Timestamp"].values, pod_df["Value"].values)
+        # for pod_df in pod_dfs:
+        #     ax.plot(pod_df["Timestamp"].values, pod_df["Value"].values)
             
         # Plot combined and total cpu usage
-        #ax.plot(combined_df["Timestamp"].values, combined_df["Value"].values, label="Combined")
-        ax.plot(total_cpu_usage["Timestamp"].values, total_cpu_usage["Value"].values, label="Total CPU Usage")
-        ax.set_title(service)
-        ax.legend()
+        experiment_start_time = combined_df["Timestamp"].values[0]
+        adjusted_combined_timestamps = (combined_df["Timestamp"].values - experiment_start_time) / (1000 * 1000 * 1000)
+        adjusted_total_cpu_timestamps = (total_cpu_usage["Timestamp"].values - experiment_start_time) / (1000 * 1000 * 1000)
+        
+        ax.plot(adjusted_combined_timestamps, combined_df["Value"].values, label="Total vCPU usage")
+        ax.plot(adjusted_total_cpu_timestamps, total_cpu_usage["Value"].values, label="Allocated vCPU capacity")
+        ax.set_title(f"Usage vs Allocated ({service})")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("vCPU (cores)")
 
         # Calculate the  evaluation metrics (under and over provisioning accuracy and timeshare)
         combined_df["Total"] = total_cpu_usage["Value"]
         combined_df["Overprov"] = combined_df["Total"] - combined_df["Value"]
         #ax.plot(combined_df["Timestamp"].values, combined_df["Overprov"].values, label="Overprovisioning")
-        ax.legend()
+        ax.legend(loc="upper right")
 
         accuracy_O = combined_df["Value"].sum() / len(combined_df)
         accuracy_U = -combined_df[combined_df["Value"] < 0]["Value"].sum() / len(combined_df)
@@ -89,10 +92,19 @@ if __name__ == "__main__":
         timeshare_U = len(combined_df[combined_df["Value"] < 0]) / len(combined_df)
 
         # Calculate effective cost (in pence)
-        effective_cost = calculate_effective_cost(combined_df, 7, 2, 15)
+        effective_cost = calculate_effective_cost(combined_df, 0.0652 * 100, 2, 15)
+
+        # Calculate the max number of pods and average pod lifetime
+        max_pods = total_cpu_usage["Value"].max() / (SERVICE_CPU_LIMITS[service] / 1000) # Convert from millicores
+        max_pods = round(max_pods)
+        avg_pod_lifetime = 0
+        for pod in pod_dfs:
+            avg_pod_lifetime += (pod["Timestamp"].max() - pod["Timestamp"].min()).total_seconds()
+        avg_pod_lifetime /= len(pod_dfs)
+        avg_pod_lifetime = round(avg_pod_lifetime / 60, 2)
 
         #print(f"{EXPERIMENT}/{service} | Accuracy_U: {accuracy_U} | Accuracy_O: {accuracy_O} | Timeshare_U: {timeshare_U} | Timeshare_O: {timeshare_O} | | Effective cost: {round(effective_total_cpu, 2)}p")
-        print(f"{EXPERIMENT}/{service} | Accuracy_O: {accuracy_O} | Effective cost: {round(effective_cost, 2)}p")
+        print(f"{EXPERIMENT}/{service} | Accuracy_O: {accuracy_O} | Effective cost: {round(effective_cost, 2)}p | Max no. of pods: {max_pods} | Avg pod lifetime: {avg_pod_lifetime}mins")
 
     # Finally show all plots
     plt.show()
